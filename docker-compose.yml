@@ -1,0 +1,37 @@
+services:
+  ubuntu1:
+    image: ubuntu:24.04
+    container_name: seed1
+    command: /mnt/bin/main -m seed -t /mnt/bin/torrent_file.torrent -d /mnt/bin
+    networks:
+      mylan:
+        ipv4_address: 192.168.10.11
+    volumes:
+      - ./bin:/mnt/bin
+
+  ubuntu2:
+    image: ubuntu:24.04
+    container_name: seed2
+    command: /mnt/bin/main -m seed -t /mnt/bin/torrent_file.torrent -d /mnt/bin
+    networks:
+      mylan:
+        ipv4_address: 192.168.10.12
+    volumes:
+      - ./bin:/mnt/bin
+
+  ubuntu3:
+    image: ubuntu:24.04
+    container_name: leech
+    command: tail -f /dev/null
+    networks:
+      mylan:
+        ipv4_address: 192.168.10.13
+    volumes:
+      - ./bin:/mnt/bin
+
+networks:
+  mylan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24
